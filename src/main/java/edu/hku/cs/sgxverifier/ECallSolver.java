@@ -4,6 +4,7 @@ import edu.hku.cs.sgxverifier.SGXClassVisitor;
 import org.objectweb.asm.ClassReader;
 
 import java.io.IOException;
+import java.util.LinkedList;
 
 /**
  * Created by max on 21/7/2018.
@@ -21,8 +22,13 @@ import java.io.IOException;
 public class ECallSolver {
     public static void main(String[] args) throws IOException {
         VirtualMachine.init();
-        SGXClassVisitor sgxClassVisitor = new SGXClassVisitor();
-        ClassReader classReader = new ClassReader("SampleClass");
-        classReader.accept(sgxClassVisitor, 0);
+        JClass jc = JClass.resolve("SampleClass");
+        LinkedList<JObject> inputs = new LinkedList<JObject>();
+        VirtualMachine vm = VirtualMachine.getVM();
+        vm.push(new JObject("p", new JValue(JValue.PlainText, JValue.Memory.Enclave)));
+        vm.push(new JObject("p", new JValue(JValue.PlainText, JValue.Memory.Enclave)));
+        vm.push(new JObject("p", new JValue(JValue.Secret, JValue.Memory.Enclave)));
+        jc.classVisitor.execute_method("do_add", "(II)I", true);
+        System.out.println("here");
     }
 }

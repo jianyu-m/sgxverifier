@@ -4,17 +4,17 @@ package edu.hku.cs.sgxverifier;
  * Created by max on 22/7/2018.
  */
 public class JValue {
-    enum Taint {
-        Secret,
-        PlainText
-    }
+
+    static final int Secret = 1;
+    static final int PlainText = 0;
     enum Memory {
         Enclave,
         Untrusted
     }
-    Taint taint;
+    int taint;
     Memory mem;
-    JValue(Taint t, Memory m) {
+    Object value;
+    JValue(int t, Memory m) {
         taint = t;
         mem = m;
     }

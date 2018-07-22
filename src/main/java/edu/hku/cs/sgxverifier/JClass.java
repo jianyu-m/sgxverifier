@@ -6,20 +6,28 @@ import java.util.Hashtable;
  * Created by max on 22/7/2018.
  */
 public class JClass {
-    String name;
-    int num_fields;
     static Hashtable<String, JClass> resolved_classes = new Hashtable<String, JClass>();
     static {
         // all primitive type is 0
-        resolved_classes.put("p", new JClass("p", 0));
-    }
-    int name_to_index(String name) {
-        return 0;
+        resolved_classes.put("p", new JClass("p"));
     }
 
-    public JClass(String m, int c) {
-        num_fields = c;
+    String name;
+    SGXClassVisitor classVisitor;
+    Hashtable<String, JObject> static_fields = new Hashtable<String, JObject>();
+
+    public JClass(String m) {
         name = m;
+        if (!m.equals("p"))
+            classVisitor = new SGXClassVisitor(m);
+    }
+
+    public void putfield(String name, JObject obj) {
+        static_fields.put(name, obj);
+    }
+
+    public JObject getfield(String name) {
+        return static_fields.get(name);
     }
 
     static JClass resolve(String cname) {
@@ -32,6 +40,6 @@ public class JClass {
     }
 
     static JClass do_resolve(String cname) {
-        return new JClass(cname, 1);
+        return new JClass(cname);
     }
 }

@@ -3,7 +3,7 @@
  */
 public class SampleClass {
     int do_add(int a, int b) {
-        return a + b;
+        return a + do_minus(a, b);
     }
 
     int do_minus(int a, int b) {

@@ -1,5 +1,6 @@
 package edu.hku.cs.sgxverifier;
 
+import java.util.Hashtable;
 import java.util.Vector;
 
 /**
@@ -10,11 +11,19 @@ public class JObject {
 
     JClass java_class;
     JValue object_value;
-    Vector<JObject> field_values;
+    Hashtable<String, JObject> field_values;
 
-    public JObject(JClass jc, JValue ov) {
-        java_class = jc;
+    public JObject(String cname, JValue ov) {
+        java_class = JClass.resolve(cname);
         object_value = ov;
-        field_values = new Vector<JObject>(jc.num_fields);
+        field_values = new Hashtable<String, JObject>();
+    }
+
+    public void putfield(String field, JObject obj) {
+        field_values.put(field, obj);
+    }
+
+    public JObject getfield(String field) {
+        return field_values.get(field);
     }
 }
